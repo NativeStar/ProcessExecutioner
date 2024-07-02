@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>ksu</title>
+</head>
+<body>
+	<!-- 瞎写的 能用就行 反正对我来说够了-->
+    <br/>
+    <dialog id="stopDialog" style="border-radius: 5px;">
+        <span>确定停止吗?只能通过重启设备恢复</span>
+        <br/>
+        <br/>
+        <button onclick="window.kill()">确定</button>
+        <button onclick="this.parentNode.close()" style="float: right;">取消</button>
+    </dialog>
+    <span>状态:</span>
+    <span id="state">Loading...</span>
+    <button onclick="window.changeState()" id="changeStateBtn">***</button>
+    <button onclick="document.getElementById('stopDialog').show()" id="killButton">停止</button>
+    <button onclick="window.reload()" id="reloadButton">重载</button>
+    <br/>
+    <br/>
+    <span>
+    	停止需要等待一段时间
+        (即下一次检测循环)
+        <br>
+        请以模块管理页面提示为准
+        <br>
+        (不停刷新直到简介提示:Stop Working)
+    </span>
+    <br/>
+    <br/>
+    <span>
+        点击"重载"按钮将在下次检测循环时
+        <br>
+        重新加载配置文件
+    </span>
+    <br>
+    <br>
+    <span>
+        模块原理:开机时读取配置文件
+        <br>
+        之后每隔10秒进行检查是否有暂停、退出或重载标记 
+        <br>
+        如无即依规杀进程
+    </span>
+    <br>
+    <br>
+    <a href="https://github.com/NativeStar/ProcessExecutioner">Github</a>
+</body>
+<script>
+    // if(window.ksu==undefined){
+    //     alert("This page only working in KernelSU WebUI");
+    //     document.body=document.createElement("body");
+    //     window.close();
+    // }
+    
+</script>
+<script src="./ksu.js" type="module"></script>
+<script src="./main.js" type="module"></script>
+</html>
