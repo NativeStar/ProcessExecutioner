@@ -9,7 +9,8 @@ window.addEventListener("load",async ()=>{
 	const result=await exec("test -f /data/adb/modules/ProcessExecutioner/pause");
 	const hasSuicideFile=await exec("test -f /data/adb/modules/ProcessExecutioner/suicide");
 	const moduleDead=await exec("test -f  /data/adb/modules/ProcessExecutioner/dead");
-	const canReload=await exec("test -f  /data/adb/modules/ProcessExecutioner/reload")
+	const canReload=await exec("test -f  /data/adb/modules/ProcessExecutioner/reload");
+	const screenOffWork=await exec("test -f  /data/adb/modules/ProcessExecutioner/checkScreen");
 	if(result.errno===0){
 		//暂停
 		changeStateBtn.innerText="恢复"
@@ -31,6 +32,12 @@ window.addEventListener("load",async ()=>{
 	if(canReload.errno===0){
 		//存在文件
 		reloadBtn.disabled=true;
+	};
+	//熄屏
+	if(screenOffWork.errno===0){
+		document.getElementById("screenState").innerText="开启";
+	}else{
+		document.getElementById("screenState").innerText="关闭";
 	}
 })
 window.changeState=async ()=>{
@@ -60,4 +67,14 @@ window.reload=async ()=>{
 	reloadBtn.disabled=true;
 	await exec("touch  /data/adb/modules/ProcessExecutioner/reload");
 	toast("已执行")
+}
+window.changeScreenOffWork=async ()=>{
+	const screenOffWork=await exec("test -f  /data/adb/modules/ProcessExecutioner/checkScreen");
+	if(screenOffWork.errno===0){
+		await exec("rm -f /data/adb/modules/ProcessExecutioner/checkScreen")
+		document.getElementById("screenState").innerText="关闭";
+	}else{
+		await exec("touch /data/adb/modules/ProcessExecutioner/checkScreen");
+		document.getElementById("screenState").innerText="开启";
+	}
 }

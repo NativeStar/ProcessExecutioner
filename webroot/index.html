@@ -20,6 +20,10 @@
     <button onclick="document.getElementById('stopDialog').show()" id="killButton">停止</button>
     <button onclick="window.reload()" id="reloadButton">重载</button>
     <br/>
+    <span>熄屏暂停运行:</span>
+    <span id="screenState">Loading...</span>
+    <button onclick="window.changeScreenOffWork()">切换</button>
+    <br/>
     <br/>
     <span>
     	停止需要等待一段时间
@@ -50,12 +54,10 @@
     <a href="https://github.com/NativeStar/ProcessExecutioner">Github</a>
 </body>
 <script>
-    // if(window.ksu==undefined){
-    //     alert("This page only working in KernelSU WebUI");
-    //     document.body=document.createElement("body");
-    //     window.close();
-    // }
-    
+     if (window.ksu == null) { 
+     	document.body.innerHTML = '<h1 style="text-align:center;">Only can working in KernelSU</h1>'; 
+    	 throw new ReferenceError("Only can working in KernelSU") 
+ }
 </script>
 <script src="./ksu.js" type="module"></script>
 <script src="./main.js" type="module"></script>

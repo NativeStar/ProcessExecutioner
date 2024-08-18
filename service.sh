@@ -29,6 +29,7 @@ rm -f "$MODDIR/waitingReboot"
 rm -f "$MODDIR/pause"
 rm -f "$MODDIR/dead"
 rm -f "$MODDIR/suicide"
+rm -f "$MODDIR/suicide_update"
 desc="(它们活着的意义是什么🤔) 已加载$rulesCount条规则 本次启动共处决0个进程 (反正不止去码头整点薯条😋)";
 sed -i "s/description=.*/description=$desc/" $MODDIR/module.prop
 #检测到文件即退出
@@ -39,6 +40,15 @@ checkExitFile(){
     	sed -i "s/description=.*/description=$desc/" "$MODDIR/module.prop"
 		#标记
     	rm -f "$MODDIR/suicide"
+		touch "$MODDIR/dead"
+    	sleep 2s
+    	exit
+    fi
+    #更新 不动文件
+    test -f "$MODDIR/suicide_update"
+    if [ "$?" == "0" ];then
+		#标记
+    	rm -f "$MODDIR/suicide_update"
 		touch "$MODDIR/dead"
     	sleep 2s
     	exit
@@ -58,6 +68,8 @@ checkReload(){
 		test -f "/data/adb/processexecutioner.config";
 		# 规则给删了 玩毛啊
 		if [ "$?" == "1" ];then
+			desc="❌[ERROR]Missing config file";
+			sed -i "s/description=.*/description=$desc/" $MODDIR/module.prop
 			return 11
 		fi
 		#覆盖
@@ -73,6 +85,14 @@ checkReload(){
 		sed -i "s/description=.*/description=$desc/" $MODDIR/module.prop
     fi
 }
+#熄屏检测
+skinOnScreenOff(){
+	local isScreenOff=dumpsys deviceidle | grep mScreenOn
+	if [ "$isScreenOff" != "mScreenOn=true" ];then
+		return 1
+	fi
+	return 0
+}
 while true; do
 	sleep 10s
 	checkExitFile
@@ -81,6 +101,14 @@ while true; do
 	if [ "$?" == "0" ];then
 		onPause
 		continue
+	fi
+	# 熄屏功能文件
+	test -f "$MODDIR/checkScreen"
+	if [ "$?" == "0" ];then
+		skinOnScreenOff
+		if [ "$?" == "1" ];then
+			continue
+		fi
 	fi
 	if [ "$paused" == "1" ];then
 		#刚恢复运行 移除暂停提醒

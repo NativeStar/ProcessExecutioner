@@ -1,7 +1,7 @@
 id=ProcessExecutioner
-name=ProcessExecutioner
-version=1.0.1
-versionCode=2
+name=Process Executioner
+version=1.1
+versionCode=3
 author=Suisho
 description=(等待重启) Wise choice
 updateJson=https://raw.githubusercontent.com/NativeStar/ProcessExecutioner/master/update.json
